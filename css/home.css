@@ -196,3 +196,18 @@ body {
   .user-dropdown:hover .dropdown-content {
     display: block;
   }
+  .card {
+    color: rgb(0, 0, 0); /* Chữ màu trắng */
+  }
+
+  .card.gym {
+    background-image: url("https://atlantisstrength.com/app/uploads/2022/02/gym-equipment-scaled-1920x1080.jpg");
+  }
+  
+  .card.yoga {
+    background-image: url("https://static.vecteezy.com/system/resources/thumbnails/002/153/866/small_2x/girl-on-the-beach-in-yoga-asana-free-photo.jpg");
+  }
+  
+  .card.zumba {
+    background-image: url("https://st2.depositphotos.com/1814774/6929/i/450/depositphotos_69298997-stock-photo-people-dancing-during-zumba-training.jpg");
+  }
