@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Admin Dashboard</h2>
+        <a href="schechule.html">Quản lý lịch</a>
+        <a href="#">Quản lý dịch vụ</a>
+        <a href="home.html">Trang chủ</a>
+        <a href="#" class="logout">Đăng xuất</a>
+      </div>
+    
+      <div class="main">
+        <h1>Thống kê lịch tập</h1>
+    
+        <div class="stats">
+          <div class="card">
+            <h3>Tổng số lịch Gym</h3>
+            <p>0</p>
+          </div>
+          <div class="card">
+            <h3>Tổng số lịch Yoga</h3>
+            <p>0</p>
+          </div>
+          <div class="card">
+            <h3>Tổng số lịch Zumba</h3>
+            <p>0</p>
+          </div>
+        </div>
+    
+        <div class="filter">
+          <div class="filter-grid">
+            <div>
+              <label for="type">Loại lịch</label>
+              <select id="type">
+                <option>Tất cả</option>
+              </select>
+            </div>
+            <div>
+              <label for="email">Email</label>
+              <input type="email" id="email" placeholder="Tìm theo email">
+            </div>
+            <div>
+              <label for="date">Ngày</label>
+              <input type="date" id="date">
+            </div>
+          </div>
+        </div>
+    
+        <table>
+          <thead>
+            <tr>
+              <th>Lớp học</th>
+              <th>Ngày tập</th>
+              <th>Khung giờ</th>
+              <th>Họ tên</th>
+              <th>Email</th>
+              <th>Thao tác</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Dữ liệu sẽ hiển thị tại đây -->
+          </tbody>
+        </table>
+      </div>
+
+    <script src="../js/admin.js"></script>
+</body>
+</html> 

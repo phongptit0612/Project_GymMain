@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gym Management</title>
+  <link rel="stylesheet" href="../css/schechule.css" />
+</head>
+<body>
+  <header>
+    <div class="header-content">
+      <strong>GYM MANAGEMENT</strong>
+      <nav>
+        <a href="home.html">Trang chủ</a>
+        <a href="#">Lịch tập</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="container">
+      <div class="section-header">
+        <h2>Quản lý lịch tập</h2>
+        <button id="add-schedule">Đặt lịch mới</button>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Lớp học</th>
+            <th>Ngày tập</th>
+            <th>Khung giờ</th>
+            <th>Họ tên</th>
+            <th>Email</th>
+            <th>Thao tác</th>
+          </tr>
+        </thead>
+        <tbody id="schedule-table">
+          <!-- Dòng mới sẽ được thêm tại đây -->
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <script src="../js/schechule.js"></script>
+</body>
+</html>
