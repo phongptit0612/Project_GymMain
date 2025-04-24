@@ -75,11 +75,9 @@ function displaySchedules() {
   });
 }
 
-// Add new schedule
 function addSchedule(event) {
   event.preventDefault();
   
-  // Kiểm tra đăng nhập
   if (!currentUser) {
     alert("Vui lòng đăng nhập để đặt lịch!");
     window.location.href = "login.html";
