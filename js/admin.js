@@ -9,3 +9,8 @@ document.querySelector('.logout').addEventListener('click', function(e) {
     localStorage.removeItem('currentUser');
     window.location.href = 'login.html';
 });
+
+let gymCourses = 0;
+let yogaCourses = 0;
+let zumbaCourses = 0;
+

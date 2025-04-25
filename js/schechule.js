@@ -1,14 +1,13 @@
-// DOM Elements
 const scheduleTable = document.getElementById("schedule-table");
-const addButton = document.getElementById("add-schedule");
 const modal = document.createElement("div");
+
 modal.className = "modal";
-modal.style.display = "none"; // Ẩn modal mặc định
+modal.style.display = "none";
 modal.innerHTML = `
   <div class="modal-content">
     <span class="close">&times;</span>
-    <h2>Đặt lịch tập mới</h2>
-    <form id="schedule-form">
+    <h2>Đặt lịch tập mới</h2> <br>
+    <form id="schedule-form" novalidate>
       <div class="form-group">
         <label for="class-type">Lớp học:</label>
         <select id="class-type" required>
@@ -17,10 +16,12 @@ modal.innerHTML = `
           <option value="yoga">Yoga</option>
           <option value="zumba">Zumba</option>
         </select>
+        <span class="error-message" id="error-class-type"></span>
       </div>
       <div class="form-group">
         <label for="schedule-date">Ngày tập:</label>
         <input type="date" id="schedule-date" required>
+        <span class="error-message" id="error-schedule-date"></span>
       </div>
       <div class="form-group">
         <label for="schedule-time">Khung giờ:</label>
@@ -33,30 +34,69 @@ modal.innerHTML = `
           <option value="15:00-16:00">15:00 - 16:00</option>
           <option value="16:00-17:00">16:00 - 17:00</option>
         </select>
+        <span class="error-message" id="error-schedule-time"></span>
       </div>
       <div class="form-group">
         <label for="fullname">Họ tên:</label>
         <input type="text" id="fullname" required>
+        <span class="error-message" id="error-fullname"></span>
       </div>
       <div class="form-group">
         <label for="email">Email:</label>
         <input type="email" id="email" required>
+        <span class="error-message" id="error-email"></span>
       </div>
-      <button type="submit">Đặt lịch</button>
+      <button type="submit">Thêm Lịch</button>
     </form>
   </div>
 `;
-
-// Add modal to body
 document.body.appendChild(modal);
 
-// Get current user from localStorage
-const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+const addButton = document.getElementById("add-schedule");
 
-// Initialize schedules from localStorage
+const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 let schedules = JSON.parse(localStorage.getItem("schedules")) || [];
 
-// Display schedules
+// Delete modal
+const deleteModal = document.createElement("div");
+deleteModal.className = "modal";
+deleteModal.style.display = "none";
+deleteModal.innerHTML = `
+  <div class="modal-content">
+    <p>Bạn có chắc chắn muốn xoá lịch này?</p>
+    <button id="confirm-delete">Xoá</button>
+    <button id="cancel-delete">Huỷ</button>
+  </div>
+`;
+document.body.appendChild(deleteModal);
+
+// Show modal
+addButton.addEventListener("click", () => {
+  if (!currentUser) {
+    alert("Vui lòng đăng nhập để đặt lịch!");
+    window.location.href = "login.html";
+    return;
+  }
+
+  // Clear errors
+  modal.querySelectorAll(".error-message").forEach(el => el.textContent = "");
+  modal.querySelectorAll(".error").forEach(el => el.classList.remove("error"));
+
+  modal.style.display = "flex";
+});
+
+document.querySelector(".close").addEventListener("click", () => {
+  modal.style.display = "none";
+});
+
+document.getElementById("schedule-form").addEventListener("submit", addSchedule);
+
+window.addEventListener("click", (event) => {
+  if (event.target === modal) {
+    modal.style.display = "none";
+  }
+});
+
 function displaySchedules() {
   scheduleTable.innerHTML = "";
   schedules.forEach((schedule, index) => {
@@ -68,6 +108,7 @@ function displaySchedules() {
       <td>${schedule.name}</td>
       <td>${schedule.email}</td>
       <td>
+        <button onclick="editSchedule(${index})">Sửa</button>
         <button onclick="deleteSchedule(${index})">Xoá</button>
       </td>
     `;
@@ -75,69 +116,127 @@ function displaySchedules() {
   });
 }
 
+let editIndex = null;
+
 function addSchedule(event) {
   event.preventDefault();
-  
+
   if (!currentUser) {
     alert("Vui lòng đăng nhập để đặt lịch!");
     window.location.href = "login.html";
     return;
   }
+
+  document.querySelectorAll(".error-message").forEach(el => el.textContent = "");
+  document.querySelectorAll(".error").forEach(el => el.classList.remove("error"));
 
   const classType = document.getElementById("class-type").value;
   const date = document.getElementById("schedule-date").value;
   const time = document.getElementById("schedule-time").value;
   const fullname = document.getElementById("fullname").value;
   const email = document.getElementById("email").value;
-  
+
+  const errorClassType = document.getElementById("error-class-type");
+  const errorDate = document.getElementById("error-schedule-date");
+  const errorTime = document.getElementById("error-schedule-time");
+  const errorName = document.getElementById("error-fullname");
+  const errorEmail = document.getElementById("error-email");
+
+  let hasError = false;
+
+  if (classType === "") {
+    errorClassType.textContent = "Vui lòng chọn lớp học.";
+    document.getElementById("class-type").classList.add("error");
+    hasError = true;
+  }
+
+  if (date === "") {
+    errorDate.textContent = "Vui lòng chọn ngày tập.";
+    document.getElementById("schedule-date").classList.add("error");
+    hasError = true;
+  }
+
+  if (time === "") {
+    errorTime.textContent = "Vui lòng chọn khung giờ.";
+    document.getElementById("schedule-time").classList.add("error");
+    hasError = true;
+  }
+
+  if (fullname === "" || fullname.length < 2) {
+    errorName.textContent = fullname === "" ? "Vui lòng nhập họ tên." : "Họ tên phải có ít nhất 2 ký tự.";
+    document.getElementById("fullname").classList.add("error");
+    hasError = true;
+  }
+
+  const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  if (email === "" || !emailPattern.test(email)) {
+    errorEmail.textContent = email === "" ? "Vui lòng nhập email." : "Email không hợp lệ.";
+    document.getElementById("email").classList.add("error");
+    hasError = true;
+  }
+
+  const duplicate = schedules.some(schedule =>
+    schedule.classType === classType &&
+    schedule.date === date &&
+    schedule.time === time &&
+    schedule.email === email
+  );
+  if (duplicate) {
+    errorTime.textContent = "Lịch tập này đã tồn tại.";
+    document.getElementById("schedule-time").classList.add("error");
+    hasError = true;
+  }
+
+  if (hasError) return;
+
   const newSchedule = {
     classType,
     date,
     time,
     name: fullname,
     email: email,
-    userId: currentUser.id // Thêm userId để theo dõi ai đặt lịch
+    userId: currentUser.id
   };
 
-  schedules.push(newSchedule);
+  if (editIndex === null) {
+    schedules.push(newSchedule);
+  } else {
+    schedules[editIndex] = newSchedule;
+    editIndex = null;
+  }
+
   localStorage.setItem("schedules", JSON.stringify(schedules));
   displaySchedules();
   modal.style.display = "none";
   event.target.reset();
 }
 
-// Delete schedule
+function editSchedule(index) {
+  const schedule = schedules[index];
+  editIndex = index;
+
+  modal.style.display = "flex";
+
+  document.getElementById("class-type").value = schedule.classType;
+  document.getElementById("schedule-date").value = schedule.date;
+  document.getElementById("schedule-time").value = schedule.time;
+  document.getElementById("fullname").value = schedule.name;
+  document.getElementById("email").value = schedule.email;
+}
+
 function deleteSchedule(index) {
-  if (confirm("Bạn có chắc chắn muốn xoá lịch này?")) {
+  deleteModal.style.display = "flex";
+
+  document.getElementById("confirm-delete").onclick = function () {
     schedules.splice(index, 1);
     localStorage.setItem("schedules", JSON.stringify(schedules));
     displaySchedules();
-  }
+    deleteModal.style.display = "none";
+  };
+
+  document.getElementById("cancel-delete").onclick = function () {
+    deleteModal.style.display = "none";
+  };
 }
 
-// Event Listeners
-addButton.addEventListener("click", () => {
-  // Kiểm tra đăng nhập trước khi mở modal
-  if (!currentUser) {
-    alert("Vui lòng đăng nhập để đặt lịch!");
-    window.location.href = "login.html";
-    return;
-  }
-  modal.style.display = "flex";
-});
-
-document.querySelector(".close").addEventListener("click", () => {
-  modal.style.display = "none";
-});
-
-document.getElementById("schedule-form").addEventListener("submit", addSchedule);
-
-// Close modal when clicking outside
-window.addEventListener("click", (event) => {
-  if (event.target === modal) {
-    modal.style.display = "none";
-  }
-});
-
-// Initialize display
 displaySchedules();

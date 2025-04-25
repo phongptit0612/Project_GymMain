@@ -197,11 +197,15 @@ body {
     display: block;
   }
   .card {
-    color: rgb(0, 0, 0); /* Chữ màu trắng */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #f5f5f5; 
+    color: rgb(4, 6, 0)
   }
 
   .card.gym {
-    background-image: url("https://atlantisstrength.com/app/uploads/2022/02/gym-equipment-scaled-1920x1080.jpg");
+    background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbfDAWy8FhkWk5-3vUSDWnR6FMjFKKPiMN-Q&s");
   }
   
   .card.yoga {
@@ -209,5 +213,10 @@ body {
   }
   
   .card.zumba {
-    background-image: url("https://st2.depositphotos.com/1814774/6929/i/450/depositphotos_69298997-stock-photo-people-dancing-during-zumba-training.jpg");
+    background-image: url("https://img.freepik.com/free-photo/inspired-happy-dark-skinned-woman-dances-joy-closes-eyes-enjoyment-closes-eye-moves-with-rhythm-music_273609-43135.jpg?semt=ais_hybrid&w=740");
+  }
+
+  .card p {
+    color: rgb(255, 255, 255) ;
+    font-weight: bold;
   }

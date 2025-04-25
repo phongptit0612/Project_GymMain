@@ -58,7 +58,7 @@ form.addEventListener('submit', function(e) {
             
             setTimeout(() => {
                 if (user.role === 'admin') {
-                    window.location.href = 'admin.html';
+                    window.location.href = 'home.html';
                 } else {
                     window.location.href = 'home.html';
                 }
