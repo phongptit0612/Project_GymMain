@@ -26,3 +26,5 @@ if (currentUser) {
 } else {
   userSection.innerHTML = '<a href="login.html">Đăng nhập</a>';
 }
+
+

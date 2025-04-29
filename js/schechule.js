@@ -38,12 +38,12 @@ modal.innerHTML = `
       </div>
       <div class="form-group">
         <label for="fullname">Họ tên:</label>
-        <input type="text" id="fullname" required>
+        <input type="text" id="fullname" disabled>
         <span class="error-message" id="error-fullname"></span>
       </div>
       <div class="form-group">
         <label for="email">Email:</label>
-        <input type="email" id="email" required>
+        <input type="email" id="email" disabled>
         <span class="error-message" id="error-email"></span>
       </div>
       <button type="submit">Thêm Lịch</button>
@@ -52,12 +52,12 @@ modal.innerHTML = `
 `;
 document.body.appendChild(modal);
 
+//lay add schedule button
 const addButton = document.getElementById("add-schedule");
 
 const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 let schedules = JSON.parse(localStorage.getItem("schedules")) || [];
 
-// Delete modal
 const deleteModal = document.createElement("div");
 deleteModal.className = "modal";
 deleteModal.style.display = "none";
@@ -70,7 +70,6 @@ deleteModal.innerHTML = `
 `;
 document.body.appendChild(deleteModal);
 
-// Show modal
 addButton.addEventListener("click", () => {
   if (!currentUser) {
     alert("Vui lòng đăng nhập để đặt lịch!");
@@ -78,9 +77,12 @@ addButton.addEventListener("click", () => {
     return;
   }
 
-  // Clear errors
+  // Xoa cac loi
   modal.querySelectorAll(".error-message").forEach(el => el.textContent = "");
   modal.querySelectorAll(".error").forEach(el => el.classList.remove("error"));
+
+  document.getElementById("fullname").value = currentUser.name;
+  document.getElementById("email").value = currentUser.email;
 
   modal.style.display = "flex";
 });
@@ -98,7 +100,8 @@ window.addEventListener("click", (event) => {
 });
 
 function displaySchedules() {
-  scheduleTable.innerHTML = "";
+  scheduleTable.innerHTML = ""; 
+
   schedules.forEach((schedule, index) => {
     const row = document.createElement("tr");
     row.innerHTML = `
@@ -127,20 +130,17 @@ function addSchedule(event) {
     return;
   }
 
+  //Xoa cac dong error
   document.querySelectorAll(".error-message").forEach(el => el.textContent = "");
   document.querySelectorAll(".error").forEach(el => el.classList.remove("error"));
 
   const classType = document.getElementById("class-type").value;
   const date = document.getElementById("schedule-date").value;
   const time = document.getElementById("schedule-time").value;
-  const fullname = document.getElementById("fullname").value;
-  const email = document.getElementById("email").value;
 
   const errorClassType = document.getElementById("error-class-type");
   const errorDate = document.getElementById("error-schedule-date");
   const errorTime = document.getElementById("error-schedule-time");
-  const errorName = document.getElementById("error-fullname");
-  const errorEmail = document.getElementById("error-email");
 
   let hasError = false;
 
@@ -162,24 +162,11 @@ function addSchedule(event) {
     hasError = true;
   }
 
-  if (fullname === "" || fullname.length < 2) {
-    errorName.textContent = fullname === "" ? "Vui lòng nhập họ tên." : "Họ tên phải có ít nhất 2 ký tự.";
-    document.getElementById("fullname").classList.add("error");
-    hasError = true;
-  }
-
-  const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  if (email === "" || !emailPattern.test(email)) {
-    errorEmail.textContent = email === "" ? "Vui lòng nhập email." : "Email không hợp lệ.";
-    document.getElementById("email").classList.add("error");
-    hasError = true;
-  }
-
   const duplicate = schedules.some(schedule =>
     schedule.classType === classType &&
     schedule.date === date &&
     schedule.time === time &&
-    schedule.email === email
+    schedule.email === currentUser.email
   );
   if (duplicate) {
     errorTime.textContent = "Lịch tập này đã tồn tại.";
@@ -193,8 +180,8 @@ function addSchedule(event) {
     classType,
     date,
     time,
-    name: fullname,
-    email: email,
+    name: currentUser.name,
+    email: currentUser.email,
     userId: currentUser.id
   };
 
