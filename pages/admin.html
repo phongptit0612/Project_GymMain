@@ -39,37 +39,37 @@
       <canvas id="scheduleChart"></canvas>
     </div>
 
-    <div class="filter">
-      <div class="filter-grid">
-        <div>
-          <label for="type">Loại lịch</label>
-          <select id="type">
-            <option>Tất cả</option>
-          </select>
-        </div>
-        <div>
-          <label for="email">Email</label>
-          <input type="email" id="email" placeholder="Tìm theo email">
-        </div>
-        <div>
-          <label for="date">Ngày</label>
-          <input type="date" id="date">
-        </div>
-      </div>
+    <!-- Filters -->
+    <div class="filters">
+      <label for="filter-class-type">Lọc theo lớp học:</label>
+      <select id="filter-class-type" onchange="filterSchedules()">
+        <option value="">Tất cả</option>
+        <option value="gym">Gym</option>
+        <option value="yoga">Yoga</option>
+        <option value="zumba">Zumba</option>
+      </select>
+
+      <label for="filter-date">Lọc theo ngày:</label>
+      <input type="date" id="filter-date" onchange="filterSchedules()">
+
+      <label for="filter-email">Lọc theo email:</label>
+      <input type="text" id="filter-email" placeholder="Nhập email" oninput="filterSchedules()">
     </div>
 
+    <!-- Schedule Table -->
     <table>
       <thead>
         <tr>
           <th>Lớp học</th>
-          <th>Ngày tập</th>
-          <th>Khung giờ</th>
+          <th>Ngày</th>
+          <th>Thời gian</th>
           <th>Họ tên</th>
           <th>Email</th>
           <th>Thao tác</th>
         </tr>
       </thead>
       <tbody>
+        <!-- Rows will be dynamically added here -->
       </tbody>
     </table>
   </div>

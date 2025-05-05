@@ -27,4 +27,3 @@ if (currentUser) {
   userSection.innerHTML = '<a href="login.html">Đăng nhập</a>';
 }
 
-
