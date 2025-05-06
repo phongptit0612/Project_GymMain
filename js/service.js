@@ -1,4 +1,3 @@
-// Create the add/edit modal
 const serviceModal = document.createElement("div");
 serviceModal.className = "modal";
 serviceModal.style.display = "none";
@@ -28,23 +27,18 @@ serviceModal.innerHTML = `
 `;
 document.body.appendChild(serviceModal);
 
-// Close modal functionality
 serviceModal.querySelector(".close").addEventListener("click", () => {
   serviceModal.style.display = "none";
 });
 
-// Initialize services array
 let services = JSON.parse(localStorage.getItem("services")) || [];
 
-// Reference to the table body
 const serviceTable = document.querySelector("table tbody");
 
-// Reference to the "Add Service" button
 const addServiceButton = document.querySelector(".btn");
 
-// Display services in the table
 function displayServices() {
-  serviceTable.innerHTML = ""; // Clear existing rows
+  serviceTable.innerHTML = ""; 
 
   services.forEach((service, index) => {
     const row = document.createElement("tr");
@@ -61,7 +55,6 @@ function displayServices() {
   });
 }
 
-// Add service functionality
 addServiceButton.addEventListener("click", () => {
   document.getElementById("modal-title").textContent = "Thêm dịch vụ";
   document.getElementById("service-name").value = "";
@@ -86,7 +79,6 @@ addServiceButton.addEventListener("click", () => {
   };
 });
 
-// Edit service functionality
 function editService(index) {
   const service = services[index];
   document.getElementById("modal-title").textContent = "Sửa dịch vụ";
@@ -112,7 +104,6 @@ function editService(index) {
   };
 }
 
-// Delete service functionality
 function deleteService(index) {
   if (confirm("Bạn có chắc chắn muốn xóa dịch vụ này?")) {
     services.splice(index, 1);
@@ -121,7 +112,6 @@ function deleteService(index) {
   }
 }
 
-// Validate service form
 function validateServiceForm(name, image, description) {
   let isValid = true;
 
@@ -143,7 +133,6 @@ function validateServiceForm(name, image, description) {
   return isValid;
 }
 
-// Show error message
 function showError(fieldId, message) {
   const field = document.getElementById(fieldId);
   const errorElement = field.nextElementSibling;
@@ -163,11 +152,9 @@ function showError(fieldId, message) {
   field.classList.add("error");
 }
 
-// Clear error messages
 function clearErrors() {
   document.querySelectorAll(".error-message").forEach(el => el.textContent = "");
   document.querySelectorAll(".form-group input, .form-group textarea").forEach(el => el.classList.remove("error"));
 }
 
-// Initial display of services
 displayServices();

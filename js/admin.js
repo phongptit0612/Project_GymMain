@@ -134,7 +134,7 @@ function deleteSchedule(index) {
     schedules.splice(scheduleIndex, 1);
     localStorage.setItem('schedules', JSON.stringify(schedules));
     countCourses();
-    filterSchedules(); // Refresh the filtered table
+    filterSchedules(); 
   }
 }
 
@@ -150,17 +150,14 @@ function editSchedule(index) {
   );
 
   if (scheduleIndex !== -1) {
-    // Pre-fill the form with the schedule data
     document.getElementById('class-type').value = schedules[scheduleIndex].classType;
     document.getElementById('schedule-date').value = schedules[scheduleIndex].date;
     document.getElementById('schedule-time').value = schedules[scheduleIndex].time;
     document.getElementById('email').value = schedules[scheduleIndex].email;
 
-    // Show the modal for editing
     const editModal = document.getElementById('edit-modal');
     editModal.style.display = 'flex';
 
-    // Handle save changes
     document.getElementById('save-changes').onclick = function () {
       schedules[scheduleIndex].classType = document.getElementById('class-type').value;
       schedules[scheduleIndex].date = document.getElementById('schedule-date').value;
@@ -168,20 +165,17 @@ function editSchedule(index) {
 
       localStorage.setItem('schedules', JSON.stringify(schedules));
       countCourses();
-      filterSchedules(); // Refresh the filtered table
+      filterSchedules(); 
       editModal.style.display = 'none';
     };
 
-    // Handle cancel
     document.getElementById('cancel-edit').onclick = function () {
       editModal.style.display = 'none';
     };
   }
 }
 
-// Initial display of schedules
 filterSchedules();
-// Create the delete modal
 const deleteModal = document.createElement("div");
 deleteModal.className = "modal";
 deleteModal.style.display = "none";
@@ -194,7 +188,6 @@ deleteModal.innerHTML = `
 `;
 document.body.appendChild(deleteModal);
 
-// Create the edit modal
 const editModal = document.createElement("div");
 editModal.className = "modal";
 editModal.style.display = "none";
@@ -240,12 +233,10 @@ editModal.innerHTML = `
 `;
 document.body.appendChild(editModal);
 
-// Close the edit modal
 editModal.querySelector(".close").addEventListener("click", () => {
   editModal.style.display = "none";
 });
 
-// Delete schedule function
 function deleteSchedule(index) {
   deleteModal.style.display = "flex";
 
@@ -254,7 +245,7 @@ function deleteSchedule(index) {
     schedules.splice(index, 1);
     localStorage.setItem("schedules", JSON.stringify(schedules));
     countCourses();
-    filterSchedules(); // Refresh the table
+    filterSchedules(); 
     deleteModal.style.display = "none";
   };
 
@@ -263,29 +254,24 @@ function deleteSchedule(index) {
   };
 }
 
-// Edit schedule function
 function editSchedule(index) {
   const schedules = JSON.parse(localStorage.getItem("schedules")) || [];
   const scheduleToEdit = schedules[index];
 
-  // Pre-fill the modal with the schedule data
   document.getElementById("edit-class-type").value = scheduleToEdit.classType;
   document.getElementById("edit-schedule-date").value = scheduleToEdit.date;
   document.getElementById("edit-schedule-time").value = scheduleToEdit.time;
   document.getElementById("edit-name").value = scheduleToEdit.name;
   document.getElementById("edit-email").value = scheduleToEdit.email;
 
-  // Clear previous error messages
   document.querySelectorAll(".error-message").forEach(el => el.textContent = "");
   document.querySelectorAll(".form-group input, .form-group select").forEach(el => el.classList.remove("error"));
 
   editModal.style.display = "flex";
 
-  // Handle save changes
   document.getElementById("edit-form").onsubmit = function (event) {
     event.preventDefault();
 
-    // Get updated values
     const updatedClassType = document.getElementById("edit-class-type").value;
     const updatedDate = document.getElementById("edit-schedule-date").value;
     const updatedTime = document.getElementById("edit-schedule-time").value;
@@ -293,7 +279,6 @@ function editSchedule(index) {
 
     let hasError = false;
 
-    // Validate fields
     if (updatedClassType === "") {
       showError("edit-class-type", "Vui lòng chọn lớp học.");
       hasError = true;
